@@ -8,6 +8,9 @@ var MongoClient = require('mongodb').MongoClient;
 var _ = require('underscore');
 var d = new Date();
 var app  = express();
+var Cloudant = require('cloudant');
+var me = 'opencta'; // Replace with your account.
+var password = process.env.CLOUDANT_PASSWORD;
 
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
@@ -59,7 +62,7 @@ var save = function(data){
             rtref.set(insert);
 
             // Use connect method to connect to the Server
-            MongoClient.connect(url, function (err, db) {
+            Cloudant({account:me, password:password}, function(err, cloudant) {
                 if (err) {
                     console.log('Unable to connect to the mongoDB server. Error:', err);
                 } else {
@@ -67,17 +70,15 @@ var save = function(data){
                     console.log('Connection established to', url);
 
                     // Get the documents collection
-                    var collection = db.collection('data');
+                    var collection = cloudant.db.use('trains-test')
                         // Insert some users
                         insert['_id'] = insert['hash'];
                         collection.insert(insert, function (err) {
                             if (err) {
                                 console.log(err);
                             } else {
-                                //console.log('Inserted %d documents into the "trains" collection. The documents inserted with "_id" are:', result.length, result);
+                              //  console.log('Inserted %d documents into the "trains" collection. The documents inserted with "_id" are:', result.length, result);
                             }
-                            //Close connection
-                            db.close();
                         });
                 }
             })

@@ -23,6 +23,7 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
+    "cloudant": "^1.4.1",
     "dotenv": "^2.0.0",
     "express": "~3.4.4",
     "firebase": "^2.3.1",
