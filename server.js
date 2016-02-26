@@ -70,7 +70,7 @@ var save = function(data){
                     console.log('Connection established to', url);
 
                     // Get the documents collection
-                    var collection = cloudant.db.use('trains-test')
+                    var collection = cloudant.db.use('trains')
                         // Insert some users
                         insert['_id'] = insert['hash'];
                         collection.insert(insert, function (err) {
