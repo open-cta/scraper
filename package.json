@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "opencta-scraper",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -9,26 +9,27 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "Brett Neese",
+    "email": "brett@neese.rocks",
+    "url": "http://brett.neese.rocks/"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://www.github.com/open-cta",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/open-cta/scraper"
   },
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "cloudant": "^1.4.1",
+    "aws-sdk": "^2.3.3",
     "dotenv": "^2.0.0",
     "express": "~3.4.4",
-    "firebase": "^2.3.1",
     "md5": "^2.0.0",
-    "mongodb": "^2.0.45",
+    "moment": "^2.12.0",
+    "moment-timezone": "^0.5.3",
+    "ngeohash": "^0.6.0",
     "request": "^2.64.0",
     "underscore": "^1.8.3",
     "xml2js": "^0.4.12"
