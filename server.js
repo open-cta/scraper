@@ -1,10 +1,8 @@
 require('dotenv').config({silent: true});
 
 // Setting some things up
-
 var request = require('request'),
     express = require('express'),
-    md5 = require('md5'),
     _ = require('underscore'),
     AWS = require("aws-sdk"),
     moment = require("moment-timezone"),
@@ -38,6 +36,7 @@ setInterval(function() {
         });
 }, 3000);
 
+// javascript is so dumb
 var isNumberic = function(num){
     return !isNaN(num);
 };
@@ -46,14 +45,15 @@ var isNumberic = function(num){
 var save = function(data){
         parseString(data, {mergeAttrs: true}, function (err, result) {
           var meta = {errCd: result.ctatt.errCd[0], errNm: result.ctatt.errNm[0], insertTimestamp: Date.now(), responseTimestamp: moment.tz(result.ctatt.tmst[0], "YYYYMMDD HH:mm:ss", "America/Chicago").unix()};
-
           var predictionResults = result.ctatt.route;
+
           _.each(predictionResults,function(element, index, list) {
             var trainsInRoute = element.train;
             var params = {
-              TableName: "trains-test-2"
+              TableName: process.env.AWS_DYNAMODB_TABLE_NAME_TRAINS
             };
 
+            //parsing
             _.each(trainsInRoute, function (train, property_index,list){
               params.Item = _.mapObject(train, function(val, key) {
                 if(isNumberic(val[0])){
@@ -62,16 +62,17 @@ var save = function(data){
                 return val[0];
             });
 
+            //mapping some things
             params.Item.routeName = element.name[0];
             params.Item.arrT = moment.tz(params.Item.arrT, "YYYYMMDD HH:mm:ss", "America/Chicago").unix();
             params.Item.prdt = moment.tz(params.Item.prdt, "YYYYMMDD HH:mm:ss", "America/Chicago").unix();
             params.Item.geohash = geohash.encode(params.Item.lat, params.Item.lon, 9);
             params.Item.meta = _.pick(meta, _.identity);
             params.Item =  _.pick(params.Item, _.identity);
-            console.log(params);
+
+            //pushing to DynamoDB
             docClient.put(params, function(err, data) {
                 if (err) console.error(JSON.stringify(err, null, 2));
-                else console.log("PutItem succeeded:", JSON.stringify(params));
             });
           });
         });
