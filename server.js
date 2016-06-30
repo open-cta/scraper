@@ -7,14 +7,37 @@ var request = require('request'),
     AWS = require("aws-sdk"),
     moment = require("moment-timezone"),
     parseString = require('xml2js').parseString,
-    geohash = require('ngeohash');
+    geohash = require('ngeohash'),
+    winston = require('winston'),
+    WinstonCloudWatch = require('winston-cloudwatch');
 
 
 var d = new Date(),
-    app  = express();
+    app  = express(),
+    dd = d.getDate(),
+    mm = d.getMonth()+1,
+    yyyy = d.getFullYear(),
+    today = yyyy + mm + dd;
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)({ level: 'debug' }),
+        new (WinstonCloudWatch)({
+            logGroupName: 'opencta-scraper',
+            logStreamName: today,
+            level: 'info'
+        })
+    ]
+});
+
+winston.add(WinstonCloudWatch, {
+  logGroupName: 'opencta-scraper',
+  logStreamName: today
+});
+
 
 // Configuring AWS
 AWS.config.update({
@@ -25,12 +48,23 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
+logger.info("----booting up----")
+
 // Doing stuff every 3 seconds
 setInterval(function() {
         var cta_url = "http://lapi.transitchicago.com/api/1.0//ttpositions.aspx?key=" + process.env.CTA_TOKEN + "&rt=brn,red,Blue,G,Org,P,Pink,Y";
         request(cta_url, function (error, response, body) {
+                if(error){
+                    logger.error(error)
+                    logger.error(response.body)
+                }
+
+                if(response.statusCode != 200){
+                    logger.error(response.statusCode)
+                    logger.error(response.body)
+                }
                 if (!error && response.statusCode == 200) {
-                    console.log('request successful!'); // Show the HTML for the Google homepage.
+                    logger.debug('request successful!'); // Show the HTML for the Google homepage.
                     save(body);
                 }
         });
@@ -72,7 +106,7 @@ var save = function(data){
 
             //pushing to DynamoDB
             docClient.put(params, function(err, data) {
-                if (err) console.error(JSON.stringify(err, null, 2));
+                if (err) logger.error(JSON.stringify(err, null, 2));
             });
           });
         });
