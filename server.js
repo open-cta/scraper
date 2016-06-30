@@ -31,16 +31,8 @@ AWS.config.update({
 
 var logger = new (winston.Logger)({
     transports: [
-        new (winston.transports.Console)({ level: 'debug' }),
-        new (WinstonCloudWatch)({
-            logGroupName: 'opencta-scraper',
-            logStreamName: today,
-            level: 'info',
-            awsRegion: 'us-east-1',
-            awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            awsSecretKey: process.env.AWS_SECRET_ACCESS_KEY
-
-        })
+        new (winston.transports.Console)({ level: 'debug' })
+        
     ]
 });
 
