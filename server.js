@@ -16,7 +16,7 @@ var d = new Date(),
     dd = d.getDate(),
     mm = d.getMonth()+1,
     yyyy = d.getFullYear(),
-    today = yyyy + mm + dd;
+    today = yyyy + '-' + mm + '-' + dd;
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
@@ -28,10 +28,11 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
+
 logger.add(WinstonCloudWatch, {
   level: 'info',
   logGroupName: 'opencta-scraper',
-  logStreamName: today.toString()
+  logStreamName: today
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
