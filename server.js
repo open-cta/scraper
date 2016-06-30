@@ -35,7 +35,11 @@ var logger = new (winston.Logger)({
         new (WinstonCloudWatch)({
             logGroupName: 'opencta-scraper',
             logStreamName: today,
-            level: 'info'
+            level: 'info',
+            awsRegion: 'us-east-1',
+            awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            awsSecretKey: process.env.AWS_SECRET_ACCESS_KEY
+
         })
     ]
 });
