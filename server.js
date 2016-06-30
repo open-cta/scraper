@@ -31,9 +31,14 @@ AWS.config.update({
 
 var logger = new (winston.Logger)({
     transports: [
-        new (winston.transports.Console)({ level: 'debug' })
-        
+        new (winston.transports.Console)({ level: 'debug' }),
     ]
+});
+
+logger.add(WinstonCloudWatch, {
+    level: 'info',
+    logGroupName: 'opencta-scraper',
+    logStreamName: today
 });
 
 winston.add(WinstonCloudWatch, {
