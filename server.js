@@ -9,7 +9,7 @@ var request = require('request'),
     parseString = require('xml2js').parseString,
     geohash = require('ngeohash'),
     winston = require('winston'),
-    WinstonCloudWatch = require('winston-cloudwatch');
+    CloudWatchTransport = require('winston-aws-cloudwatch')
 
 
 var d = new Date(),
@@ -29,11 +29,33 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
+
+var config = {
+  logGroupName: 'opencta-scraper', // REQUIRED
+  logStreamName: today, // REQUIRED
+  createLogGroup: true,
+  createLogStream: true,
+  awsConfig: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: 'us-east-1'
+  },
+  formatLogItem: function (item) {
+    return item.level + ': ' + item.message + ' ' + JSON.stringify(item.meta)
+  }
+}
+
+var cwt = new CloudWatchTransport(config)
 var logger = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)({ level: 'debug' }),
+        cwt
     ]
 });
+
+cwt.on('error', function (error) {
+  console.error('Error logging to CloudWatch: ' + error.message)
+})
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
