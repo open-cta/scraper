@@ -22,6 +22,13 @@ var d = new Date(),
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
+// Configuring AWS
+AWS.config.update({
+    region: "us-east-1",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
+
 var logger = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)({ level: 'debug' }),
@@ -36,14 +43,6 @@ var logger = new (winston.Logger)({
 winston.add(WinstonCloudWatch, {
   logGroupName: 'opencta-scraper',
   logStreamName: today
-});
-
-
-// Configuring AWS
-AWS.config.update({
-    region: "us-east-1",
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
