@@ -2,12 +2,7 @@
   "name": "opencta-scraper",
   "version": "1.0.0",
   "description": "",
-  "keywords": [
-    "OpenShift",
-    "Node.js",
-    "application",
-    "openshift"
-  ],
+  "keywords": [],
   "author": {
     "name": "Brett Neese",
     "email": "brett@neese.rocks",
@@ -26,6 +21,7 @@
     "aws-sdk": "^2.3.3",
     "dotenv": "^2.0.0",
     "express": "~3.4.4",
+    "forever": "^0.15.2",
     "moment-timezone": "^0.5.3",
     "ngeohash": "^0.6.0",
     "request": "^2.64.0",
