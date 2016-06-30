@@ -16,8 +16,6 @@ var d = new Date(),
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
-var response;
-
 // Configuring AWS
 AWS.config.update({
     region: "us-east-1",
@@ -75,15 +73,14 @@ var save = function(data){
             //pushing to DynamoDB
             docClient.put(params, function(err, data) {
                 if (err) console.error(JSON.stringify(err, null, 2));
-                response = data;
             });
           });
         });
       });
   };
 
-app.get('/', function (req, res, response) {
-   res.end(response);
+app.get('/', function (req, res) {
+   res.end("It's alive!");
 });
 
 app.listen(port, ip);
