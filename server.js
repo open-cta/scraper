@@ -24,7 +24,9 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 1337;
 
 // Configuring AWS
 AWS.config.update({
-    region: "us-east-1"
+    region: "us-east-1",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 var logger = new (winston.Logger)({
@@ -103,7 +105,7 @@ var save = function(data){
 
             //pushing to DynamoDB
             docClient.put(params, function(err, data) {
-                if (err) logger.error(JSON.stringify(err, null, 2));
+                if (err) logger.error(JSON.stringify(err, null, 2), logger.error(JSON.stringify(data, null, 2) );
             });
           });
         });
