@@ -49,11 +49,13 @@ setInterval(function() {
         var cta_url = "http://lapi.transitchicago.com/api/1.0//ttpositions.aspx?key=" + process.env.CTA_TOKEN + "&rt=brn,red,Blue,G,Org,P,Pink,Y";
         request(cta_url, function (error, response, body) {
                 if(error){
+                    logger.debug('request error!')
                     logger.error(error)
                     logger.error(response.body)
                 }
 
                 if(response.statusCode != 200){
+                    logger.debug('bad request ! code: ')
                     logger.error(response.statusCode)
                     logger.error(response.body)
                 }
