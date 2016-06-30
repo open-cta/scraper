@@ -28,7 +28,7 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-logger.add(logger.transports.Console, {
+logger.configure(logger.transports.Console, {
   level: 'debug'
 });
 
