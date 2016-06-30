@@ -28,9 +28,7 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-logger.configure(logger.transports.Console, {
-  level: 'debug'
-});
+logger.transports.console.level = 'debug';
 
 logger.add(WinstonCloudWatch, {
   level: 'info',
