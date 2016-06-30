@@ -104,7 +104,7 @@ var save = function(data){
                     logger.error("original params: ");
                     logger.error(JSON.stringify(params, null, 2));
                 } else if (data) {
-                    logger.info('data inserted: ' + JSON.stringify(data, null, 2))
+                    logger.info('data inserted: ' + JSON.stringify(params, null, 2))
                 }
             });
           });
