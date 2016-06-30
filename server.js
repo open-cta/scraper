@@ -8,9 +8,8 @@ var request = require('request'),
     moment = require("moment-timezone"),
     parseString = require('xml2js').parseString,
     geohash = require('ngeohash'),
-    winston = require('winston'),
+    logger = require('winston'),
     WinstonCloudWatch = require('winston-cloudwatch');
-
 
 var d = new Date(),
     app  = express(),
@@ -29,13 +28,12 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-var logger = new (winston.Logger)({
-    transports: [
-        new (winston.transports.Console)({ level: 'debug' }),
-    ]
+logger.add(logger.transports.Console, {
+  level: 'debug'
 });
 
-winston.add(WinstonCloudWatch, {
+logger.add(WinstonCloudWatch, {
+  level: 'info',
   logGroupName: 'opencta-scraper',
   logStreamName: today.toString()
 });
