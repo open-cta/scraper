@@ -35,17 +35,6 @@ var logger = new (winston.Logger)({
     ]
 });
 
-logger.add(WinstonCloudWatch, {
-    level: 'info',
-    logGroupName: 'opencta-scraper',
-    logStreamName: today
-});
-
-winston.add(WinstonCloudWatch, {
-  logGroupName: 'opencta-scraper',
-  logStreamName: today
-});
-
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 logger.info("----booting up----")
