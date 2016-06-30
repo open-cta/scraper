@@ -102,7 +102,15 @@ var save = function(data){
 
             //pushing to DynamoDB
             docClient.put(params, function(err, data) {
-                if (err) logger.error(JSON.stringify(err, null, 2)); logger.error(JSON.stringify(data, null, 2));
+                if (err){
+                    logger.error("error posting to dynamodb! error: ");
+                    logger.error(JSON.stringify(err, null, 2)); 
+                    logger.error("data: ");
+                    logger.error(JSON.stringify(data, null, 2));
+                    logger.error("original params: ");
+                    logger.error(JSON.stringify(params, null, 2));
+
+                }
             });
           });
         });
